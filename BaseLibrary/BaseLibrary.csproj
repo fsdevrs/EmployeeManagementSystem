@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DTOs\AccountBase.cs~RF670615.TMP" />
+    <None Remove="DTOs\Login.cs~RF67e22d.TMP" />
+    <None Remove="DTOs\Register.cs~RF6c0bf9.TMP" />
+    <None Remove="Entities\BaseEntity.cs~RF62741a.TMP" />
+    <None Remove="Entities\Department.cs~RF5ec47f.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+  </ItemGroup>
+
+</Project>

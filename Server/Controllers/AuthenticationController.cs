@@ -24,9 +24,20 @@ namespace Server.Controllers
             {
                 return BadRequest(new { message = "Model is empty" }); 
             }
-
             var result = await _userAccount.CreateAsync(user);
             return Ok(result);
+        }
+
+        //Method For Signing User
+        [HttpPost("login")]
+        public async Task<IActionResult> SignInAsync(Login user)
+        {
+            if (user == null) 
+            {
+                return BadRequest(new { message = "Model is empty" });
+            }
+            var results = await _userAccount.SignInAsync(user);
+            return Ok(results);
         }
     }
 }

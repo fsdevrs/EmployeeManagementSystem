@@ -93,6 +93,19 @@ namespace ServerLibrary.Repositories.Implementations
             //Generating Jwt tokens on Login Successfull
             string jwtToken = GenerateToken(applicationUser, getRoleName!.Name!);
             string refreshToken = GenerateRefreshToken();
+
+            //Save the refreshToken To Db
+            var findUser = await _empDbContext.RefreshTokenInfos.FirstOrDefaultAsync(_ => _.UserId == applicationUser.Id);
+            if (findUser is not null)
+            {
+                findUser!.Token = refreshToken;
+                await _empDbContext.SaveChangesAsync();
+            }
+            else
+            {
+                await AddToDatabase(new RefreshTokenInfo() { Token = refreshToken, UserId = applicationUser.Id });
+            }
+
             return new LoginResponse(true, "Login Succesfully", jwtToken, refreshToken);
         }
 

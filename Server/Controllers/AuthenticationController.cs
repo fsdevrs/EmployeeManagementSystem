@@ -16,7 +16,7 @@ namespace Server.Controllers
             _userAccount = userAccount; // Assign injected dependency
         }
 
-        //Method For Register the New User
+        //Controller For Register the New User
         [HttpPost("register")]
         public async Task<IActionResult> CreateAsync(Register user)
         {
@@ -28,7 +28,7 @@ namespace Server.Controllers
             return Ok(result);
         }
 
-        //Method For Signing User
+        //Controller For Signing User
         [HttpPost("login")]
         public async Task<IActionResult> SignInAsync(Login user)
         {
@@ -37,6 +37,18 @@ namespace Server.Controllers
                 return BadRequest(new { message = "Model is empty" });
             }
             var results = await _userAccount.SignInAsync(user);
+            return Ok(results);
+        }
+
+        //Controller for refreshToken
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshTokenAsync(RefreshToken token)
+        {
+            if (token == null)
+            {
+                return BadRequest(new { message = "Model is empty" });
+            }
+            var results = await _userAccount.RefreshTokenAsync(token);
             return Ok(results);
         }
     }

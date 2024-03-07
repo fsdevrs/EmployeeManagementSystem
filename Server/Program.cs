@@ -24,6 +24,17 @@ builder.Services.AddDbContext<EmpDbContext>(options =>
 builder.Services.Configure<JwtSection>(builder.Configuration.GetSection("JwtSection"));
 builder.Services.AddScoped<IUserAccount, UserAccountRepository>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClient",
+       builder => builder
+       .WithOrigins("https://localhost:7255", "http://localhost:5134")
+       .AllowAnyMethod()
+       .AllowAnyHeader()
+       .AllowCredentials()
+        );
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,6 +45,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowClient");
 
 app.UseAuthorization();
 

@@ -32,17 +32,30 @@ namespace ClientLibrary.Services.Implementations
 
             return await result.Content.ReadFromJsonAsync<GenralResponse>()!;
         }
-        public Task<LoginResponse> SignInAsync(Login user)
+        public async Task<LoginResponse> SignInAsync(Login user)
         {
-            throw new NotImplementedException();
+            var httpclient = _getHttpClient.GetPublicHttpClient();
+            var result = await httpclient.PostAsJsonAsync($"{AuthUrl}/login", user);
+            if (!result.IsSuccessStatusCode) return new LoginResponse(false, "Error occured");
+
+
+            var content = await result.Content.ReadAsStringAsync();
+            if (string.IsNullOrEmpty(content))
+            {
+                return new LoginResponse(false, "Empty response from server");
+            }
+
+            return await result.Content.ReadFromJsonAsync<LoginResponse>()!;
         }
         public Task<LoginResponse> RefreshTokenAsync(RefreshToken token)
         {
             throw new NotImplementedException();
         }
-        public Task<WeatherForecast[]> GetWeatherForecasts()
+        public async Task<WeatherForecast[]> GetWeatherForecasts()
         {
-            throw new NotImplementedException();
+            var httpClient = await _getHttpClient.GetPrivateHttpClient();
+            var result = await httpClient.GetFromJsonAsync<WeatherForecast[]>("api/weatherforecast");
+            return result!;
         }  
     }
 }

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="DTOs\AccountBase.cs~RF670615.TMP" />
+    <None Remove="DTOs\CustomUserClaim.cs~RF242e457a.TMP" />
     <None Remove="DTOs\Login.cs~RF67e22d.TMP" />
     <None Remove="DTOs\Register.cs~RF6c0bf9.TMP" />
     <None Remove="Entities\BaseEntity.cs~RF62741a.TMP" />

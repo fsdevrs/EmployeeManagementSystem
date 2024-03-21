@@ -1,30 +1,185 @@
 ﻿@page "/identity/account/login"
-<div class="container">
-    <div class="row">
-        <div class="col-lg-6">
-           <EditForm Enhance Model="User" OnValidSubmit="HandleLogin">
-               <DataAnnotationsValidator />
-               <ValidationSummary/>
-               <div class="card">
-                   <div class="card-header">Fill this form to login</div>
-                   <div class="card-body">
-                       <div class="form-group mt-3">
-                           <label class="form-label">Email</label>
-                           <InputText @bind-Value="User.Email" class="form-control"></InputText>
-                       </div>
-                       <div class="form-group mt-3">
-                           <label class="form-label">Password</label>
-                           <input type="password" @bind="User.Password" class="form-control"/>
-                       </div> 
-                       <div class="form-group mt-3">
-                           <button class="btn btn-outline-primary float-end" type="submit">Login</button>
-                       </div>
-                   </div> 
-               </div>
-           </EditForm>
-        </div>
+@layout AuthLayout
+
+<div class="login-box">
+    <div class="login-header">
+        <header>Login</header>
     </div>
+    <div class="auth-logo">
+        <img src="/images/auth-logo.png" alt="Auth Logo" />
+    </div>
+    <EditForm Enhance Model="User" OnValidSubmit="HandleLogin">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="input-box">
+            <InputText @bind-Value="User.Email" class="input-field" placeholder="Email" autocomplete="off"></InputText>
+        </div>
+        <div class="input-box">
+            <input type="password" @bind="User.Password" class="input-field" placeholder="Password" autocomplete="off" />
+        </div>
+        <div class="forgot">
+            <section>
+                <input type="checkbox" id="check">
+                <label for="check">Remember me</label>
+            </section>
+            <section>
+                <a href="#">Forgot password</a>
+            </section>
+        </div>
+        <div class="input-submit">
+            <button class="submit-btn" id="submit" type="submit"></button>
+            <label for="submit">Sign In</label>
+        </div>
+        <div class="sign-up-link">
+            <p>Don't have an account? <a href="#">Sign up now.</a></p>
+        </div>
+    </EditForm>
 </div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #fff;
+    }
+
+    .login-box {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        width: 440px;
+        height: 480px;
+        padding: 30px;
+    }
+
+    .login-header {
+        text-align: center;
+        margin: 20px 0 10px 0;
+    }
+
+        .login-header header {
+            color: #333;
+            font-size: 50px;
+            font-weight: 600;
+        }
+
+    .auth-logo {
+        align-self: center;
+        margin: 20px 0 20px 0;
+    }
+
+        .auth-logo img {
+            height: 75px;
+            width: auto;
+            align-self: center;
+        }
+
+    .input-box .input-field {
+        width: 100%;
+        height: 60px;
+        font-size: 17px;
+        padding: 0 25px;
+        margin-bottom: 15px;
+        border-radius: 30px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 5px 10px 1px rgba(0,0,0, 0.05);
+        outline: 1px solid rgba(0, 0, 0, 0.1);
+        transition: .3s;
+    }
+
+    ::placeholder {
+        font-weight: 500;
+        color: #222;
+    }
+
+    .input-field:focus {
+        width: 105%;
+    }
+
+    .input-field:hover {
+        width: 105%;
+    }
+
+    .forgot {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 40px;
+    }
+
+    section {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #555;
+    }
+
+    #check {
+        margin-right: 7px;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    section a {
+        color: #555;
+    }
+
+    .input-submit {
+        position: relative;
+    }
+
+    .submit-btn {
+        width: 100%;
+        height: 60px;
+        background: #222;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+    .input-submit label {
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        color: #fff;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+    }
+
+    .submit-btn:hover {
+        background: #000;
+        transform: scale(1.05,1);
+    }
+
+    .sign-up-link {
+        text-align: center;
+        font-size: 15px;
+        margin-top: 20px;
+    }
+
+        .sign-up-link a {
+            color: #000;
+            font-weight: 600;
+            transition: .3s;
+        }
+</style>
 
 @code {
     BaseLibrary.DTOs.Login User = new BaseLibrary.DTOs.Login();

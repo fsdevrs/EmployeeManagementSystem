@@ -19,4 +19,8 @@
     <ProjectReference Include="..\ClientLibrary\ClientLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Shared\AuthLayout.razor" />
+  </ItemGroup>
+
 </Project>

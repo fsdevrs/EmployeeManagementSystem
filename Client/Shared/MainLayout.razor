@@ -1,33 +1,28 @@
 ﻿@inherits LayoutComponentBase
+@using MudBlazor
 
-<div class="page">
-    <div class="sidebar">
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        My Application
+    </MudAppBar>
+    <MudDrawer @bind-Open="@_drawerOpen">
         <NavMenu />
-    </div>
-    <main>
-        <div class="top-row px-4">
-            <AuthorizeView>
-                <Authorized>
-                    <a class="btn btn-none text-danger" @onclick="LogoutClicked">Logout</a>
-                </Authorized>
-                <NotAuthorized>
-                    <a class="btn btn-none" href="identity/account/login">Login</a>
-                    <a class="btn btn-none" href="identity/account/register">Register</a>
-                </NotAuthorized>
-            </AuthorizeView>
-        </div>
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
 
-@code{
-    async Task LogoutClicked()
+@code {
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
     {
-        var logoutModel = new UserSession();
-        var customStateAuthProvider = (CustomAuthStateProvider)AuthStateProvider;
-        await customStateAuthProvider.UpdateAuthenticationState(logoutModel);
-        NavManager.NavigateTo("/", forceLoad: true);
+        _drawerOpen = !_drawerOpen;
     }
 }

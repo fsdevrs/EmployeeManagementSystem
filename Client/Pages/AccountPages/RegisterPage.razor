@@ -9,23 +9,23 @@
     <div class="auth-logo">
         <img src="/images/auth-logo.png" alt="Auth Logo" />
     </div>
-    <EditForm Enhance Model="validationModel" OnValidSubmit="HandleRegistration">
+    <EditForm Enhance Model="User" OnValidSubmit="HandleRegistration">
         <DataAnnotationsValidator />
         <div class="input-box">
-            <InputText @bind-Value="validationModel.FullName" class="input-field" placeholder="Full Name" type="text" autocomplete="off"></InputText>
-            <ValidationMessage For="@(() => validationModel.FullName)"  />
+            <InputText @bind-Value="User.FullName" class="input-field" placeholder="Full Name" type="text" autocomplete="off"></InputText>
+            <ValidationMessage For="@(() => User.FullName)" Text="FullName required!" Class="error-message" />
         </div>
         <div class="input-box">
-            <InputText @bind-Value="validationModel.Email" class="input-field" placeholder="Email" type="email" autocomplete="off"></InputText>
-            <ValidationMessage For="@(() => validationModel.Email)"  />
+            <InputText @bind-Value="User.Email" class="input-field" placeholder="Email" type="email" autocomplete="off"></InputText>
+            <ValidationMessage For="@(() => User.Email)" Text="Email required!" Class="error-message" />
         </div>
 		 <div class="input-box">
-            <input type="password" @bind="validationModel.Password" class="input-field" placeholder="Password" autocomplete="off" />
-            <ValidationMessage For="@(() => validationModel.Password)"  />
+            <input type="password" @bind="User.Password" class="input-field" placeholder="Password" autocomplete="off" />
+            <ValidationMessage For="@(() => User.Password)" Text="Password required!" Class="error-message" />
         </div>
 		 <div class="input-box">
-            <input type="password" @bind="validationModel.ConfirmPassword" class="input-field" placeholder="Confirm Password" autocomplete="off" />
-            <ValidationMessage For="@(() => validationModel.ConfirmPassword)"  />
+            <input type="password" @bind="User.ConfirmPassword" class="input-field" placeholder="Confirm Password" autocomplete="off" />
+            <ValidationMessage For="@(() => User.ConfirmPassword)" Text="Confirm Password required." Class="error-message" />
         </div>
         <div class="input-submit">
             <button class="submit-btn" id="submit" type="submit"></button>
@@ -189,63 +189,16 @@
 
 @code {
 
-    public class ValidationModel
-    {
-        [Required(ErrorMessage ="Please enter Fullname!")]
-        public string? FullName  {get; set;}
-
-        [EmailAddress(ErrorMessage="Invalid Email Address!")]
-        [Required(ErrorMessage ="Please enter email address!")]
-        public string? Email { get; set; }
-
-        [Required(ErrorMessage = "Password is required!")]
-        public string? Password  { get; set; }
-
-        [Required(ErrorMessage = "Confirm Password is required!")]
-        [Compare("Password", ErrorMessage = "Passwords do not match!")]
-        public string? ConfirmPassword { get; set; }
-    }
-
-    private ValidationModel validationModel = new ValidationModel();
-
+    
     BaseLibrary.DTOs.Register User = new BaseLibrary.DTOs.Register();
     async Task HandleRegistration()
     {
-        // Map user input to validationModel properties (if needed)
-    validationModel.FullName = User.FullName;
-    validationModel.Email = User.Email;
-    validationModel.Password = User.Password;
-    validationModel.ConfirmPassword = User.ConfirmPassword;
-
-    // Perform validation on validationModel properties (using DataAnnotations or custom logic)
-
-    // Example using DataAnnotations on ValidationModel
-    var validationContext = new ValidationContext(validationModel);
-    var validationResults = new List<ValidationResult>();
-    Validator.TryValidateObject(validationModel, validationContext, validationResults, true);
-
-    if (validationResults.Any())
-    {
-        // Display validation errors to user (e.g., using a modal or inline messages)
-        return;
-    }
-
-    // Validation successful, copy data to User object (if needed)
-    User.FullName = validationModel.FullName;
-    User.Email = validationModel.Email;
-    User.Password = validationModel.Password;
-    User.ConfirmPassword = validationModel.ConfirmPassword;
-
-
         var result = await accountService.CreateAsync(User);
         if (result.Flag)
         {
             User = new();
         }
-        else
-        {
-            
-        }
+        NavManager.NavigateTo("/", forceLoad:true);
     }
     
 }

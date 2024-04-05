@@ -1,5 +1,6 @@
 ﻿@page "/identity/account/register"
 @using System.ComponentModel.DataAnnotations
+@using Client.Pages.OtherPages
 @layout AuthLayout
 
 <div class="login-box">
@@ -28,8 +29,15 @@
             <ValidationMessage For="@(() => User.ConfirmPassword)" Text="Confirm Password required." Class="error-message" />
         </div>
         <div class="input-submit">
+            @if (ShowLoadingButton)
+            {
+                <BtnLoadingSpinner></BtnLoadingSpinner>
+            }
+            else
+            {
             <button class="submit-btn" id="submit" type="submit"></button>
             <label for="submit">Register</label>
+            }
         </div>
         <div class="sign-up-link">
             <p>Already have an account? <a href="identity/account/login">Login now.</a></p>
@@ -189,16 +197,18 @@
 
 @code {
 
-    
+    public bool ShowLoadingButton {get; set;} = false;
     BaseLibrary.DTOs.Register User = new BaseLibrary.DTOs.Register();
     async Task HandleRegistration()
     {
+        ShowLoadingButton = true;
         var result = await accountService.CreateAsync(User);
         if (result.Flag)
         {
             User = new();
         }
         NavManager.NavigateTo("/", forceLoad:true);
+        ShowLoadingButton = false;
     }
     
 }

@@ -1,5 +1,8 @@
 ﻿@page "/identity/account/login"
+@using Client.Pages.OtherPages
+@using Syncfusion.Blazor.Popups
 @layout AuthLayout
+@inject SfDialogService DialogService
 
 <div class="login-box">
     <div class="login-header">
@@ -26,8 +29,15 @@
             </section>
         </div>
         <div class="input-submit">
+            @if (ShowLoadingButton)
+            {
+                <BtnLoadingSpinner></BtnLoadingSpinner>
+            }
+            else
+            {
             <button class="submit-btn" id="submit" type="submit"></button>
             <label for="submit">Sign In</label>
+            }
         </div>
         <div class="sign-up-link">
             <p>Don't have an account? <a href="identity/account/register">Sign up now.</a></p>
@@ -182,12 +192,16 @@
 </style>
 
 @code {
+
+    public bool ShowLoadingButton {get; set;} = false;
     BaseLibrary.DTOs.Login User = new BaseLibrary.DTOs.Login();
     async Task HandleLogin()
     {
+        ShowLoadingButton = true;
         var result = await accountService.SignInAsync(User);
         if (result.Flag)
         {
+            await DisplayDialog(result.Message, "Login Success");
             var customAuthStateProvider = (CustomAuthStateProvider)AuthStateProvider;
             await customAuthStateProvider.UpdateAuthenticationState(new UserSession()
             {
@@ -195,5 +209,14 @@
             });
             NavManager.NavigateTo("/", forceLoad: true);
         }
+        else
+        {
+            await DisplayDialog(result.Message, "Error!");
+        }
+        ShowLoadingButton = false;
+    }
+    private async Task DisplayDialog(string content, string title)
+    {
+        await DialogService.AlertAsync(content, title);
     }
 }

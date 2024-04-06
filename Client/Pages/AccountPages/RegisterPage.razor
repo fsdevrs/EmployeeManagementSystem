@@ -1,7 +1,9 @@
 ﻿@page "/identity/account/register"
 @using System.ComponentModel.DataAnnotations
 @using Client.Pages.OtherPages
+@using Syncfusion.Blazor.Popups
 @layout AuthLayout
+@inject SfDialogService DialogService
 
 <div class="login-box">
     <div class="login-header">
@@ -205,10 +207,19 @@
         var result = await accountService.CreateAsync(User);
         if (result.Flag)
         {
+            await DisplayDialog(result.Message, "Regisration Successfull");
             User = new();
+        }
+        else
+        {
+            await DisplayDialog(result.Message, "Error!");
         }
         NavManager.NavigateTo("/", forceLoad:true);
         ShowLoadingButton = false;
+    }
+    private async Task DisplayDialog(string content, string title)
+    {
+        await DialogService.AlertAsync(content, title);
     }
     
 }

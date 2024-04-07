@@ -201,6 +201,11 @@
 
     public bool ShowLoadingButton {get; set;} = false;
     BaseLibrary.DTOs.Register User = new BaseLibrary.DTOs.Register();
+    [CascadingParameter] public Task<AuthenticationState> AuthenticationState {get; set;}
+        protected async override Task OnInitializedAsync()
+        {
+            await CheckUserAuthentication();
+        }
     async Task HandleRegistration()
     {
         ShowLoadingButton = true;
@@ -221,5 +226,12 @@
     {
         await DialogService.AlertAsync(content, title);
     }
+    private async Task CheckUserAuthentication()
+        {
+            var user = (await AuthenticationState).User;
+            bool isUserAuthenticated = user.Identity!.IsAuthenticated;
+            if (!isUserAuthenticated)
+            NavManager.NavigateTo("/home/dashboard");
+        }
     
 }

@@ -198,40 +198,47 @@
 </style>
 
 @code {
+public bool ShowLoadingButton { get; set; } = false;
 
-    public bool ShowLoadingButton {get; set;} = false;
-    BaseLibrary.DTOs.Register User = new BaseLibrary.DTOs.Register();
-    [CascadingParameter] public Task<AuthenticationState> AuthenticationState {get; set;}
-        protected async override Task OnInitializedAsync()
-        {
-            await CheckUserAuthentication();
-        }
-    async Task HandleRegistration()
+BaseLibrary.DTOs.Register User = new BaseLibrary.DTOs.Register();
+
+[CascadingParameter]
+public Task<AuthenticationState> AuthenticationState { get; set; }
+
+protected async override Task OnInitializedAsync()
+{
+    await CheckUserAuthentication();
+}
+
+async Task HandleRegistration()
+{
+    ShowLoadingButton = true;
+    var result = await accountService.CreateAsync(User);
+    if (result.Flag)
     {
-        ShowLoadingButton = true;
-        var result = await accountService.CreateAsync(User);
-        if (result.Flag)
-        {
-            await DisplayDialog(result.Message, "Regisration Successfull");
-            User = new();
-        }
-        else
-        {
-            await DisplayDialog(result.Message, "Error!");
-        }
-        NavManager.NavigateTo("/", forceLoad:true);
-        ShowLoadingButton = false;
+        await DisplayDialog(result.Message, "Registration Successful");
+        User = new();
+        NavManager.NavigateTo("/home/dashboard");
     }
-    private async Task DisplayDialog(string content, string title)
+    else
     {
-        await DialogService.AlertAsync(content, title);
+        await DisplayDialog(result.Message, "Error!");
     }
-    private async Task CheckUserAuthentication()
-        {
-            var user = (await AuthenticationState).User;
-            bool isUserAuthenticated = user.Identity!.IsAuthenticated;
-            if (!isUserAuthenticated)
-            NavManager.NavigateTo("/home/dashboard");
-        }
-    
+    ShowLoadingButton = false;
+}
+
+private async Task DisplayDialog(string content, string title)
+{
+    await DialogService.AlertAsync(content, title);
+}
+
+private async Task CheckUserAuthentication()
+{
+    var user = (await AuthenticationState).User;
+    bool isUserAuthenticated = user.Identity!.IsAuthenticated;
+    if (isUserAuthenticated)
+    {
+        NavManager.NavigateTo("/home/dashboard");
+    }
+}
 }

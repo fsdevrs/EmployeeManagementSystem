@@ -1,15 +1,29 @@
 ﻿@page "/"
+@using Client.Pages.AccountPages
+@using Client.Pages.ContentPages
+@using System.Security.Claims
 
 @inject NavigationManager NavManager
 
+<CascadingAuthenticationState>
+    @if (user.Identity?.IsAuthenticated ?? false)
+    {
+        <HomePage />
+    }
+    else
+    {
+        <Login />
+    }
+</CascadingAuthenticationState>
+
 @code {
-    [CascadingParameter] public Task<AuthenticationState> AuthenticationState {get; set;}
-        protected override async Task OnInitializedAsync()
-        {
-            var user = (await AuthenticationState).User;
-            if(user.Identity!.IsAuthenticated)
-              NavManager.NavigateTo("/home/dashboard");
-            else
-              NavManager.NavigateTo("/identity/account/login");  
-        }
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private ClaimsPrincipal user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = (await AuthenticationState).User;
+    }
 }

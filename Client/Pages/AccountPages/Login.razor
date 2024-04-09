@@ -193,42 +193,52 @@
 
 @code {
 
-    public bool ShowLoadingButton {get; set;} = false;
-    BaseLibrary.DTOs.Login User = new BaseLibrary.DTOs.Login();
-    [CascadingParameter] public Task<AuthenticationState> AuthenticationState {get; set;}
-        protected async override Task OnInitializedAsync()
-        {
-            await CheckUserAuthentication();
-        }
-    async Task HandleLogin()
+    public bool ShowLoadingButton { get; set; } = false;
+
+BaseLibrary.DTOs.Login User = new BaseLibrary.DTOs.Login();
+
+[CascadingParameter]
+public Task<AuthenticationState> AuthenticationState { get; set; }
+
+protected async override Task OnInitializedAsync()
+{
+    await CheckUserAuthentication();
+}
+
+async Task HandleLogin()
+{
+    ShowLoadingButton = true;
+    var result = await accountService.SignInAsync(User);
+    if (result.Flag)
     {
-        ShowLoadingButton = true;
-        var result = await accountService.SignInAsync(User);
-        if (result.Flag)
+        await DisplayDialog(result.Message, "Login Success");
+        var customAuthStateProvider = (CustomAuthStateProvider)AuthStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(new UserSession()
         {
-            await DisplayDialog(result.Message, "Login Success");
-            var customAuthStateProvider = (CustomAuthStateProvider)AuthStateProvider;
-            await customAuthStateProvider.UpdateAuthenticationState(new UserSession()
-            {
-                Token = result.Token, RefreshToken = result.RefreshToken
-            });
-            NavManager.NavigateTo("/", forceLoad: true);
-        }
-        else
-        {
-            await DisplayDialog(result.Message, "Error!");
-        }
-        ShowLoadingButton = false;
+            Token = result.Token,
+            RefreshToken = result.RefreshToken
+        });
+        NavManager.NavigateTo("/home/dashboard");
     }
-    private async Task DisplayDialog(string content, string title)
+    else
     {
-        await DialogService.AlertAsync(content, title);
+        await DisplayDialog(result.Message, "Error!");
     }
-    private async Task CheckUserAuthentication()
-        {
-            var user = (await AuthenticationState).User;
-            bool isUserAuthenticated = user.Identity!.IsAuthenticated;
-            if (!isUserAuthenticated)
-            NavManager.NavigateTo("/home/dashboard");
-        }
+    ShowLoadingButton = false;
+}
+
+private async Task DisplayDialog(string content, string title)
+{
+    await DialogService.AlertAsync(content, title);
+}
+
+private async Task CheckUserAuthentication()
+{
+    var user = (await AuthenticationState).User;
+    bool isUserAuthenticated = user.Identity!.IsAuthenticated;
+    if (isUserAuthenticated)
+    {
+        NavManager.NavigateTo("/home/dashboard");
+    }
+}
 }

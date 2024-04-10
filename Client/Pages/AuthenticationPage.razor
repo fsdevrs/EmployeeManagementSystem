@@ -8,11 +8,13 @@
 <CascadingAuthenticationState>
     @if (user.Identity?.IsAuthenticated ?? false)
     {
-        <HomePage />
+            <HomePage />
     }
     else
     {
-        <Login />
+        <AuthLayout>
+            <Login />
+        </AuthLayout>
     }
 </CascadingAuthenticationState>
 

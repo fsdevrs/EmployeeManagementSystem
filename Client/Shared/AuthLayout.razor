@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-            @Body
+            @ChildContent
         </div>
     </div>
 </div>
@@ -27,4 +27,9 @@
         background: #fff;
     }
 </style>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}
 

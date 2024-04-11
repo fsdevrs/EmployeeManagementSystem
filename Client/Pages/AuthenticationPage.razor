@@ -1,20 +1,19 @@
 ﻿@page "/"
 @using Client.Pages.AccountPages
+@using Client.Pages.AdminPages
 @using Client.Pages.ContentPages
+@using Client.Shared
 @using System.Security.Claims
-
 @inject NavigationManager NavManager
 
 <CascadingAuthenticationState>
-    @if (user.Identity?.IsAuthenticated ?? false)
+    @if (!(user.Identity?.IsAuthenticated ?? false))
     {
-            <HomePage />
+        NavManager.NavigateTo("/identity/account/login");
     }
     else
     {
-        <AuthLayout>
-            <Login />
-        </AuthLayout>
+        NavManager.NavigateTo("/home/dashboard");
     }
 </CascadingAuthenticationState>
 

@@ -1,5 +1,4 @@
-﻿@page "/nav"
-@using Microsoft.AspNetCore.Components.Authorization
+﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Client.ApplicationStates
 @inject DepartmentState departmentState
 
@@ -15,19 +14,18 @@
               </button>
           </div>
        </div> 
-       @*Navbar Items*@
        <div class="@NavMenuCssClass nav-scrollable"@onclick="ToggleNavMenu">
           <nav class="flex-column">
                <div class="nav-item px-3">
                   <NavLink class="nav-link p-2" href="/home/dashboard">
                      <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span>
-                      Home
+                     <span>Home</span>
                   </NavLink>
                </div>
                <div class="nav-item px-3">
                   <NavLink class="nav-link p-2" href="counter">
                      <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span>
-                      Counter
+                      <span>Counter</span>
                   </NavLink>
                </div>
                <div class="nav-item px-3">

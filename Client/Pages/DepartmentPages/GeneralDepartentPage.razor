@@ -1,3 +1,4 @@
+@using BaseLibrary.Entities
 @using Client.ApplicationStates
 @implements IDisposable
 @inject DepartmentState departmentState
@@ -54,7 +55,7 @@
 <GeneralDepartmentDialog @ref="generalDepartmentDialog" />
 @code {
     GeneralDepartmentDialog? generalDepartmentDialog;
-    BaseLibrary.DTOs.GeneralDepartmentDTO Department =  new BaseLibrary.DTOs.GeneralDepartmentDTO();
+    GeneralDepartment Department =new();
     protected override void OnInitialized()
     {
         departmentState.GeneralDepartmentAction += StateHasChanged;

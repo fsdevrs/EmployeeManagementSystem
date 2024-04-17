@@ -21,19 +21,19 @@ builder.Services.Configure<JwtSection>(builder.Configuration.GetSection("JwtSect
 var jwtSection = builder.Configuration.GetSection(nameof(JwtSection)).Get<JwtSection>();
 
 //Configure App Db Context
-builder.Services.AddDbContext<EmpDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnections") ?? throw new InvalidOperationException(
-      "Sorry , Connection not found"));
-});
-
-//Configure Connection strings for Postgresql
 //builder.Services.AddDbContext<EmpDbContext>(options =>
 //{
-   //options.UseNpgsql(builder.Configuration.GetConnectionString("FeatureConnection") ?? throw new InvalidOperationException(
-      //"Sorry , Connection not found"),
-       //b => b.MigrationsAssembly("Server"));
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnections") ?? throw new InvalidOperationException(
+      //"Sorry , Connection not found"));
 //});
+
+//Configure Connection strings for Postgresql
+builder.Services.AddDbContext<EmpDbContext>(options =>
+{
+   options.UseNpgsql(builder.Configuration.GetConnectionString("FeatureConnection") ?? throw new InvalidOperationException(
+      "Sorry , Connection not found"),
+       b => b.MigrationsAssembly("Server"));
+});
 
 //Adding Authentication scheme
 builder.Services.AddAuthentication(options =>

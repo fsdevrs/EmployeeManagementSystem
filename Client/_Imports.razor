@@ -1,5 +1,7 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using BaseLibrary.Entities
+@using Client.ApplicationStates
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
@@ -8,14 +10,20 @@
 @using Microsoft.JSInterop
 @using Client
 @using Client.Shared
-
-
-
 @using BaseLibrary.DTOs;
 @using ClientLibrary.Helpers;
 @using Microsoft.AspNetCore.Components.Authorization
 @using ClientLibrary.Services.Contracts
-
+@using Syncfusion.Blazor.Popups
 @inject AuthenticationStateProvider AuthStateProvider
 @inject IUserAccountService accountService
 @inject NavigationManager NavManager
+@inject SfDialogService dialogService
+@inject IGenericServiceInterface<GeneralDepartment> generalDepartmentService
+@inject IGenericServiceInterface<Department> departmentService
+@inject IGenericServiceInterface<Branch> branchService
+@inject IGenericServiceInterface<Country> countryService
+@inject IGenericServiceInterface<City> cityService
+@inject IGenericServiceInterface<Town> townService
+@inject IGenericServiceInterface<Employee> employeeService
+@inject AllStates allStates

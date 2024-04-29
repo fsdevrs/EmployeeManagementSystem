@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Client.ApplicationStates
-@inject DepartmentState departmentState
+@inject AllStates departmentState
 
 <AuthorizeView>
     <Authorized>
@@ -20,12 +20,6 @@
                   <NavLink class="nav-link p-2" href="/home/dashboard">
                      <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span>
                      <span>Home</span>
-                  </NavLink>
-               </div>
-               <div class="nav-item px-3">
-                  <NavLink class="nav-link p-2" href="counter">
-                     <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span>
-                      <span>Counter</span>
                   </NavLink>
                </div>
                <div class="nav-item px-3">

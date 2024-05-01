@@ -39,6 +39,7 @@ builder.Services.AddScoped<IGenericServiceInterface<Branch>, GenericServiceImple
 builder.Services.AddScoped<IGenericServiceInterface<Country>, GenericServiceImplementation<Country>>();
 builder.Services.AddScoped<IGenericServiceInterface<City>, GenericServiceImplementation<City>>();
 builder.Services.AddScoped<IGenericServiceInterface<Town>, GenericServiceImplementation<Town>>();
+builder.Services.AddScoped<IGenericServiceInterface<Employee>, GenericServiceImplementation<Employee>>();
 builder.Services.AddScoped<AllStates>();
 builder.Services.AddScoped<SfDialogService>();
 

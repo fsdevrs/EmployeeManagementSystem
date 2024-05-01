@@ -1,14 +1,14 @@
 <SfDialog width="250px" IsModal="true" ShowCloseIcon="true" @bind-Visible="IsVisible">
     <DialogEvents OnOpen="OpenDialog"></DialogEvents>
     <DialogTemplates>
-        <Header>Add Department</Header>
+        <Header>@Title Department</Header>
         <Content>
-            <EditForm Model="Department" Enhance OnSubmit="Save">
+            <EditForm Model="GeneralDepartment" Enhance OnSubmit="Save">
                 <div class="card border-success">
                     <div class="card-body">
                         <div class="form-group">
                             <label class="form-label">Name</label>
-                            <InputText @bind-Value="Department.Name" class="form-control" />
+                            <InputText @bind-Value="GeneralDepartment.Name" class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -21,8 +21,9 @@
 </SfDialog>
 
 @code {
-    [Parameter] public GeneralDepartment Department {get; set;} =new();
-    
+    [Parameter] public GeneralDepartment GeneralDepartment { get; set; } = new();
+    [Parameter] public EventCallback<GeneralDepartment> HandleSaveOperationEvent { get; set; }
+    public string Title { get; set; } = "Add";
     private bool IsVisible {get; set;} = false;
     public void OpenDialog()
     {
@@ -31,7 +32,13 @@
     }
     async void Save()
     {
-        if (string.IsNullOrEmpty(Department.Name))
-        await dialogService.AlertAsync("You need to provide Department Name.", "Alert!");
+        if (string.IsNullOrEmpty(GeneralDepartment.Name))
+            await dialogService.AlertAsync("You need to provide Department Name.", "Alert!");
+        else
+            await HandleSaveOperationEvent.InvokeAsync(GeneralDepartment);
+    }
+    public void ChangeTitle(string title)
+    {
+        Title = title;
     }
 }

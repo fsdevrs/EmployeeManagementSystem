@@ -49,13 +49,51 @@
         </div>
     </div>
 }
-<GeneralDepartmentDialog @ref="generalDepartmentDialog" />
+<GeneralDepartmentDialog @ref="generalDepartmentDialog"
+                         HandleSaveOperationEvent="HandleSaveOperationEvent" 
+                         GeneralDepartment="GeneralDepartment"/>
 @code {
     GeneralDepartmentDialog? generalDepartmentDialog;
-    GeneralDepartment Department =new();
-    protected override void OnInitialized()
+    GeneralDepartment GeneralDepartment =new();
+    public string Title { get; set; } = "Add";
+    public List<GeneralDepartment> GeneralDepartments { get; set; } = new();
+    protected async override Task OnInitializedAsync()
     {
-        allStates.GeneralDepartmentAction += StateHasChanged;
+        await GetGeneralDepartments();
+        allStates.Action += StateHasChanged;
+    }
+    private async Task GetGeneralDepartments()
+    {
+
+        GeneralDepartments = await generalDepartmentService.GetAll(Constants.GeneralDepartmentBaseUrl);
+    }
+
+    private async Task HandleSaveOperationEvent(GeneralDepartment generalDepartment)
+    {
+        bool successCheck = false;
+        if (generalDepartment.Id > 0)
+        {
+            var result = await generalDepartmentService
+            .Update(generalDepartment, Constants.GeneralDepartmentBaseUrl);
+            successCheck = await DisplayMessage(result.Flag, result.Message);
+        }
+        else
+        {
+            var response = await generalDepartmentService
+            .Insert(generalDepartment, Constants.GeneralDepartmentBaseUrl);
+            successCheck = await DisplayMessage(response.Flag, response.Message);
+        }
+        if(successCheck)
+        {
+            generalDepartment = new();
+            await GetGeneralDepartments();
+            generalDepartmentDialog?.ChangeTitle("Add");
+        }
+    }
+
+    private async Task<bool> DisplayMessage(bool  flag, string message)
+    {
+        
     }
 
     void OpenDialog()
@@ -65,6 +103,6 @@
 
     public void Dispose()
     {
-        allStates.GeneralDepartmentAction -= StateHasChanged;
+        allStates.Action -= StateHasChanged;
     }
 }

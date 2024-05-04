@@ -85,15 +85,32 @@
         }
         if(successCheck)
         {
-            generalDepartment = new();
+            GeneralDepartment = new();
             await GetGeneralDepartments();
             generalDepartmentDialog?.ChangeTitle("Add");
         }
     }
 
+    private void EditClicked (GeneralDepartment dep)
+    {
+        generalDepartmentDialog?.ChangeTitle("Update");
+        GeneralDepartment = dep;
+        OpenDialog();
+
+    }
+
     private async Task<bool> DisplayMessage(bool  flag, string message)
     {
-        
+        if(flag)
+        {
+            await dialogService.AlertAsync(message, "Success Operation");
+            return true;
+        }
+        else
+        {
+            await dialogService.AlertAsync(message, "Alert");
+            return false;
+        }
     }
 
     void OpenDialog()

@@ -27,7 +27,9 @@ namespace ServerLibrary.Repositories.Implementations
 
         public async Task<GenralResponse> Insert(GeneralDepartment item)
         {
-            if(!await CheckName(item.Name!)) return new GenralResponse(false, "Department already exists");
+            var checkIfNull = await CheckName(item.Name);
+            if(checkIfNull) 
+            return new GenralResponse(false, "General Department already exists");
             empDbContext.GeneralDepartments.Add(item);
             await Commit();
             return Success();
@@ -42,7 +44,7 @@ namespace ServerLibrary.Repositories.Implementations
             return Success();
         }
 
-        private static GenralResponse NotFound() => new(false, "Sorry department not found");
+        private static GenralResponse NotFound() => new(false, "Sorry general department not found");
 
         private static GenralResponse Success() => new(true, "Process completed");
 
@@ -50,7 +52,7 @@ namespace ServerLibrary.Repositories.Implementations
 
         private async Task<bool> CheckName(string name)
         {
-            var items = await empDbContext.Departments.FirstOrDefaultAsync(x => x.Name!.ToLower().Equals(name.ToLower()));
+            var items = await empDbContext.GeneralDepartments.FirstOrDefaultAsync(x => x.Name!.ToLower().Equals(name.ToLower()));
             return items is null;
         }
     }

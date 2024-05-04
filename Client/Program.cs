@@ -13,7 +13,6 @@ using Syncfusion.Blazor.Popups;
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBMAY9C3t2VVhkQlFacldJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxQdkZjWn9dc3RQQGlVVkI=");
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
